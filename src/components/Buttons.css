@@ -1,0 +1,10 @@
+.grid-item {
+    width: 6vw;
+    height: 6vw;
+    margin: clamp(0.5vw, 0.75vw, 1vw) 0;
+    box-shadow: 2px 2px 2px black;
+}
+
+.active {
+    box-shadow: none;
+}
