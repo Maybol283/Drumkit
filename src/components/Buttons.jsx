@@ -4,12 +4,14 @@ import "./Buttons.css";
 
 class AudioButton extends Component {
     audioRef = React.createRef();
-    state = { isActive: false };
-
+    state = { isActive: false};
+    
     playSound = () => {
+        if(!this.props.powerState) return;
         const audio = this.audioRef.current;
         audio.currentTime = 0;  // Reset the audio playback to the beginning
         audio.play();  // Start the audio playback
+        audio.volume = (this.props.soundLevel/100);
     }
 
     setActive = (isActive) => {
@@ -78,14 +80,16 @@ class Buttons extends Component {
     const rows = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
 
     return (
-        <Container fluid className="px-2 pe-2">
+        <Container >
             {rows.map((row, rowIndex) => (
-                <Row key={rowIndex}>
+                <Row className="g-0 pt-1" key={rowIndex}>
                     {row.map(i => (
                         <AudioButton
                         key={i}
                         ref={(ref) => { this.buttonRefs[audioSRC[i].label] = ref; }}
+                        soundLevel={this.props.soundLevel}
                         {...audioSRC[i]}
+                        powerState={this.props.powerState}
                     />
                     ))}
                 </Row>
