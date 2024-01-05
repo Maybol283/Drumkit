@@ -1,9 +1,22 @@
-import React, { Component } from 'react';
+import { Component, ChangeEvent } from 'react';
 import { Container, Form } from 'react-bootstrap';
 
 
-class ControlPanel extends Component {
-    constructor(props) {
+
+// Define the prop types
+type ControlPanelProps = {
+  soundLevel: number;
+  setSoundLevel: (level: number) => void;
+  onPowerToggle: () => void;
+};
+
+// Define the state type
+type ControlPanelState = {
+  localSoundLevel: number;
+};
+
+class ControlPanel extends Component<ControlPanelProps, ControlPanelState>  {
+    constructor(props: ControlPanelProps) {
         super(props);
         this.state = {
             localSoundLevel: props.soundLevel, // Initialize with prop value
@@ -11,8 +24,8 @@ class ControlPanel extends Component {
         };
     }
    
-    handleSliderChange = (event) => {
-      const newLevel = event.target.value;
+    handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
+      const newLevel = parseInt(event.target.value, 10);
       this.setState({ localSoundLevel: newLevel }); // Update local state
       this.props.setSoundLevel(newLevel); // Update parent state
   }
@@ -40,7 +53,6 @@ class ControlPanel extends Component {
               <Form.Range 
               value={localSoundLevel}
               onChange={this.handleSliderChange}
-              type="range"
               />
             </Container>
          );

@@ -1,20 +1,37 @@
-import React, { Component } from "react";
+import React, { Component, RefObject } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import "./Buttons.css";
 
-class AudioButton extends Component {
-    audioRef = React.createRef();
+type AudioButtonProps = {
+    label: string;
+    src: string;
+    soundLevel: number;
+    powerState: boolean;
+};
+
+type AudioButtonState = {
+    isActive: boolean;
+};
+
+class AudioButton extends Component <AudioButtonProps, AudioButtonState> {
+    audioRef: RefObject<HTMLAudioElement> = React.createRef();
     state = { isActive: false};
+    constructor(props: AudioButtonProps) {
+        super(props);
+        this.state = { isActive: false };
+    }
     
     playSound = () => {
         if(!this.props.powerState) return;
         const audio = this.audioRef.current;
+        if (audio){
         audio.currentTime = 0;  // Reset the audio playback to the beginning
         audio.play();  // Start the audio playback
         audio.volume = (this.props.soundLevel/100);
     }
+    }
 
-    setActive = (isActive) => {
+    setActive = (isActive: boolean) => {
         this.setState({ isActive });
     }
 
@@ -32,11 +49,13 @@ class AudioButton extends Component {
     }
 }
 
-class Buttons extends Component {
-    constructor(props) {
-        super(props);
-        this.buttonRefs = {};
-    }
+type ButtonsProps = {
+    soundLevel: number;
+    powerState: boolean;
+};
+
+class Buttons extends Component <ButtonsProps>{
+    buttonRefs: { [key: string]: AudioButton | null } = {};
 
     componentDidMount() {
         window.addEventListener('keydown', this.handleKeyDown);
@@ -48,7 +67,7 @@ class Buttons extends Component {
         window.removeEventListener('keyup', this.handleKeyUp);
     }
 
-    handleKeyDown = (event) => {
+    handleKeyDown = (event:any) => {
         const key = event.key.toUpperCase();
         const audioButton = this.buttonRefs[key];
         if (audioButton) {
@@ -57,7 +76,7 @@ class Buttons extends Component {
         }
     }
 
-    handleKeyUp = (event) => {
+    handleKeyUp = (event:any) => {
         const key = event.key.toUpperCase();
         const audioButton = this.buttonRefs[key];
         if (audioButton) {

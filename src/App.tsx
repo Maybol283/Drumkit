@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Buttons from './components/Buttons.jsx';
 import './components/Buttons.css';
 import { Container, Row, Col } from 'react-bootstrap';
